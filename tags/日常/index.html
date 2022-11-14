@@ -52,17 +52,6 @@
 <body>
   <div id="app">
     
-      <canvas class="fireworks"></canvas>
-      <style>
-        .fireworks {
-          position: fixed;
-          left: 0;
-          top: 0;
-          z-index: 99999;
-          pointer-events: none;
-        }
-      </style>
-      
       
     <main class="content on">
       <section class="outer">
@@ -201,7 +190,7 @@
     </li>
     
     <li class="nav-item">
-      <a class="nav-item-link" target="_blank" rel="noopener" href="http://shenyu-vip.lofter.com">摄影</a>
+      <a class="nav-item-link" target="_blank" rel="noopener" href="https://xinjinjumin9731894.lofter.com">摄影</a>
     </li>
     
     <li class="nav-item">
@@ -242,7 +231,7 @@
 <!-- #reward -->
 <div id="reward">
   <span class="close"><i class="ri-close-line"></i></span>
-  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <p class="reward-p"><i class="ri-cup-line"></i>随缘打赏，喜欢就好</p>
   <div class="reward-box">
     
     <div class="reward-item">
@@ -393,10 +382,6 @@
 
 <!-- ClickBoom1 -->
 
-<script src="https://cdn.staticfile.org/animejs/3.2.1/anime.min.js"></script>
-
-<script src="/js/clickBoom1.js"></script>
- 
 <!-- ClickBoom2 -->
 
 <!-- CodeCopy -->
@@ -474,7 +459,7 @@
     
     
     <iframe frameborder="no" border="1" marginwidth="0" marginheight="0" width="200" height="52"
-        src="//music.163.com/outchain/player?type=2&id=418708385&auto=1&height=32"></iframe>
+        src="//music.163.com/outchain/player?type=2&id=448119&auto=1&height=32"></iframe>
 </div>
 
 <style>
@@ -487,6 +472,42 @@
 </style>
     
     
+<script>
+  const password = "JxQ";
+  const lock_password = window.sessionStorage.getItem("lock_password");
+  console.log(password, lock_password);
+  if (lock_password !== password) {
+    Swal.fire({
+      title: "请输入访问密码",
+      input: "text",
+      inputAttributes: {
+        autocapitalize: "off",
+      },
+      showCancelButton: false,
+      showLoaderOnConfirm: true,
+      allowOutsideClick: false,
+      confirmButtonText: "确定",
+    }).then((result) => {
+      console.log(result);
+      if (result.isConfirmed) {
+        console.log(password);
+        if (result.value === password) {
+          window.sessionStorage.setItem("lock_password", result.value);
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "密码错误，请重试",
+            confirmButtonText: "确定",
+            allowOutsideClick: false,
+          }).then(() => {
+            window.location.reload();
+          });
+        }
+      }
+    });
+  }
+</script>
+
 
   </div>
 </body>
