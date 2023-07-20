@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>Login / Sign Up Form</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="shortcut icon" href="/access/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <form action = "POST" class="form " id="login">
+            <h1 class="form__title"><b>LabelTools:</b><br> </h1>
+            <h2 class="form__title"><em>a tool box for text labeling</em></h2>
+            <div class="form__message form__message--error"></div>
+            <div class="form__input-group">
+                <input type="text" class="form__input" autofocus placeholder="Username or email">
+                <div class="form__input-error-message"></div>
+            </div>
+            <div class="form__input-group">
+                <input type="password" class="form__input" autofocus placeholder="Password">
+                <div class="form__input-error-message"></div>
+            </div>
+            <button class="form__button" type="submit" id="regBtn">Continue</button>
+            <p class="form__text">
+                <a href="#" class="form__link">Forgot your password?</a>
+            </p>
+            <p class="form__text">
+                <a  class="form__link" href="./" id="linkcreateAccount">Don't have an account? Create account</a>
+            </p>
+        </form>
+        <form class="form form--hidden" id="createAccount">
+            <h1 class="form__title"><b>Create Account</b><br> </h1>
+            <div class="form_ _message form__message--error"></div>
+            <div class="form__input-group">
+                <input type="text" id="signupUsername" class="form__input" autofocus placeholder="Username">
+                <div class="form__input-error-message"></div>
+            </div>
+            <div class="form__input-group">
+                <input type="text" id="signupEmail" class="form__input" autofocus placeholder="Email Address">
+                <div class="form__input-error-message"></div>
+            </div>
+            <div class="form__input-group">
+                <input type="text" id="signupPassword" class="form__input" autofocus placeholder="Password">
+                <div class="form__input-error-message"></div>
+            </div>
+            <div class="form__input-group">
+                <input type="text" id="confirmPassword" class="form__input" autofocus placeholder="Confirm Password">
+                <div class="form__input-error-message"></div>
+            </div>
+            <button class="form__button" type="submit">Continue</button>
+            <p class="form__text">
+                <a  class="form__link" href="./" id="linklogin">Already have an account? Sign in</a>
+            </p>
+        </form>
+    </div>
+    <script src="main.js"></script>
+    <script src="md5.min.js"></script>
+    <script type="text/javascript" scr="jquery.min.js">
+	    document.getElementById('regBtn').onclick = function() {
+		    var input_username = document.getElementById("signupUsername").value;
+		    var input_password = document.getElementById("signupPassword").value;
+		    var input_email    = document.getElementById("signupEmail").value;
+		    // ajax提交用户名+密码到后台程序
+		    var xhr = new XMLHttpRequest();	
+		    xhr.open("POST", "registerRecv.php");
+    		xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	    	xhr.send("username="+input_username+"&email="+input_email+"&password="+md5(input_password));
+		    xhr.onreadystatechange = function() {
+			    if(xhr.readyState==4 && xhr.status==200) {
+    				var res = xhr.responseText;
+	    			// 后台响应成功则跳转到登录页面.
+		    		if(res=="register success") {
+			    		alert("Register success");
+				    	window.location.href = "index.html";
+    				}
+	    			else {
+		    			alert(res);
+			    	}
+			    }
+		}    
+	}
+    </script>
+</body> 
