@@ -1,0 +1,785 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jingxi Qin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、原函数12345678910111213function (..., list &#x3D; character(), pos &#x3D; -1, envir &#x3D; as.environment(pos),     inherits &#x3D; FALSE) &#123;    if (...length()) &#123;        dots &lt;- match.call(expand.dots &#x3D; FALSE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rm()原函数代码解读（下）">
+<meta property="og:url" content="http://example.com/2024/08/26/rm(2)/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、原函数12345678910111213function (..., list &#x3D; character(), pos &#x3D; -1, envir &#x3D; as.environment(pos),     inherits &#x3D; FALSE) &#123;    if (...length()) &#123;        dots &lt;- match.call(expand.dots &#x3D; FALSE">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-08-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-08-26T15:42:24.402Z">
+<meta property="article:author" content="Jingxi Qin">
+<meta property="article:tag" content="R">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>rm()原函数代码解读（下） - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="rm()原函数代码解读（下）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-08-26 00:00" pubdate>
+          2024年8月26日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          26 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">rm()原函数代码解读（下）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="一、原函数"><a href="#一、原函数" class="headerlink" title="一、原函数"></a>一、原函数</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs R"><span class="hljs-keyword">function</span> <span class="hljs-punctuation">(</span>...<span class="hljs-punctuation">,</span> <span class="hljs-built_in">list</span> <span class="hljs-operator">=</span> character<span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">,</span> pos <span class="hljs-operator">=</span> <span class="hljs-operator">-</span><span class="hljs-number">1</span><span class="hljs-punctuation">,</span> envir <span class="hljs-operator">=</span> <span class="hljs-built_in">as.environment</span><span class="hljs-punctuation">(</span>pos<span class="hljs-punctuation">)</span><span class="hljs-punctuation">,</span> <br>    inherits <span class="hljs-operator">=</span> <span class="hljs-literal">FALSE</span><span class="hljs-punctuation">)</span> <br><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span>...length<span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">&#123;</span><br>        dots <span class="hljs-operator">&lt;-</span> match.call<span class="hljs-punctuation">(</span>expand.dots <span class="hljs-operator">=</span> <span class="hljs-literal">FALSE</span><span class="hljs-punctuation">)</span><span class="hljs-operator">$</span>...<br>        <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span><span class="hljs-operator">!</span><span class="hljs-built_in">all</span><span class="hljs-punctuation">(</span>vapply<span class="hljs-punctuation">(</span>dots<span class="hljs-punctuation">,</span> <span class="hljs-keyword">function</span><span class="hljs-punctuation">(</span>x<span class="hljs-punctuation">)</span> <span class="hljs-built_in">is.symbol</span><span class="hljs-punctuation">(</span>x<span class="hljs-punctuation">)</span> <span class="hljs-operator">||</span> <span class="hljs-built_in">is.character</span><span class="hljs-punctuation">(</span>x<span class="hljs-punctuation">)</span><span class="hljs-punctuation">,</span> <br>            <span class="hljs-literal">NA</span><span class="hljs-punctuation">,</span> USE.NAMES <span class="hljs-operator">=</span> <span class="hljs-literal">FALSE</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span> <br>            stop<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;... must contain names or character strings&quot;</span><span class="hljs-punctuation">)</span><br>        <span class="hljs-built_in">list</span> <span class="hljs-operator">&lt;-</span> .Primitive<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;c&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">(</span><span class="hljs-built_in">list</span><span class="hljs-punctuation">,</span> vapply<span class="hljs-punctuation">(</span>dots<span class="hljs-punctuation">,</span> <span class="hljs-built_in">as.character</span><span class="hljs-punctuation">,</span> <br>            <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span><br>    <span class="hljs-punctuation">&#125;</span><br>    .Internal<span class="hljs-punctuation">(</span>remove<span class="hljs-punctuation">(</span><span class="hljs-built_in">list</span><span class="hljs-punctuation">,</span> envir<span class="hljs-punctuation">,</span> inherits<span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>我现在发现，rm和vapply等等函数其实都是R的内置函数，前面的判断条件都是为了保证函数能够正常运行的。内置函数的源代码不能直接在控制台查看。</p>
+<p>但是前面的这些控制条件的代码也是非常值得学习的。</p>
+<h2 id="二、-逻辑运算符"><a href="#二、-逻辑运算符" class="headerlink" title="二、|| 逻辑运算符"></a>二、|| 逻辑运算符</h2><p>在 R 语言中，<code>||</code> 是逻辑运算符，用于执行逻辑“或”操作。与 <code>|</code>（元素级逻辑或）不同，<code>||</code> 是短路运算符，只用于处理长度为 1 的逻辑值，并在第一个条件为 <code>TRUE</code> 时停止评估后续条件。</p>
+<p>具体来说：</p>
+<ul>
+<li><code>||</code> 会首先评估左边的条件。如果左边的条件为 <code>TRUE</code>，则整个表达式的结果为 <code>TRUE</code>，并且右边的条件不会被评估。这称为“短路”行为。</li>
+<li>如果左边的条件为 <code>FALSE</code>，才会评估右边的条件。</li>
+</ul>
+<p>这种短路行为对于提高计算效率很有用，特别是在右边的条件可能涉及到昂贵或不必要的计算时。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs R">x <span class="hljs-operator">&lt;-</span> <span class="hljs-literal">TRUE</span><br>y <span class="hljs-operator">&lt;-</span> stop<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;This will not be executed&quot;</span><span class="hljs-punctuation">)</span><br>result <span class="hljs-operator">&lt;-</span> x <span class="hljs-operator">||</span> y  <span class="hljs-comment"># 由于 x 为 TRUE，y 不会被评估，结果为 TRUE</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="三、vapply"><a href="#三、vapply" class="headerlink" title="三、vapply"></a>三、vapply</h2><p>vapply是将指定函数用在list中每一个元素上的函数。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs R"><span class="hljs-operator">&gt;</span> vapply<br><span class="hljs-keyword">function</span> <span class="hljs-punctuation">(</span>X<span class="hljs-punctuation">,</span> FUN<span class="hljs-punctuation">,</span> FUN.VALUE<span class="hljs-punctuation">,</span> ...<span class="hljs-punctuation">,</span> USE.NAMES <span class="hljs-operator">=</span> <span class="hljs-literal">TRUE</span><span class="hljs-punctuation">)</span> <br><span class="hljs-punctuation">&#123;</span><br>    FUN <span class="hljs-operator">&lt;-</span> match.fun<span class="hljs-punctuation">(</span>FUN<span class="hljs-punctuation">)</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span><span class="hljs-operator">!</span>is.vector<span class="hljs-punctuation">(</span>X<span class="hljs-punctuation">)</span> <span class="hljs-operator">||</span> <span class="hljs-built_in">is.object</span><span class="hljs-punctuation">(</span>X<span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span> <br>        X <span class="hljs-operator">&lt;-</span> as.list<span class="hljs-punctuation">(</span>X<span class="hljs-punctuation">)</span><br>    .Internal<span class="hljs-punctuation">(</span>vapply<span class="hljs-punctuation">(</span>X<span class="hljs-punctuation">,</span> FUN<span class="hljs-punctuation">,</span> FUN.VALUE<span class="hljs-punctuation">,</span> USE.NAMES<span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><code>lapply</code> returns a list of the same length as <code>X</code>, each element of which is the result of applying <code>FUN</code> to the corresponding element of <code>X</code>.</p>
+<p><code>sapply</code> is a user-friendly version and wrapper of <code>lapply</code> by default returning a vector, matrix or, if <code>simplify = &quot;array&quot;</code>, an array if appropriate, by applying <code>simplify2array()</code>. <code>sapply(x, f, simplify = FALSE, USE.NAMES = FALSE)</code> is the same as <code>lapply(x, f)</code>.</p>
+<p><code>vapply</code> is similar to <code>sapply</code>, but has a pre-specified type of return value, so it can be safer (and sometimes faster) to use.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs R"><span class="hljs-operator">&gt;</span> lapply<br><span class="hljs-keyword">function</span> <span class="hljs-punctuation">(</span>X<span class="hljs-punctuation">,</span> FUN<span class="hljs-punctuation">,</span> ...<span class="hljs-punctuation">)</span> <br><span class="hljs-punctuation">&#123;</span><br>    FUN <span class="hljs-operator">&lt;-</span> match.fun<span class="hljs-punctuation">(</span>FUN<span class="hljs-punctuation">)</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span><span class="hljs-operator">!</span>is.vector<span class="hljs-punctuation">(</span>X<span class="hljs-punctuation">)</span> <span class="hljs-operator">||</span> <span class="hljs-built_in">is.object</span><span class="hljs-punctuation">(</span>X<span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span> <br>        X <span class="hljs-operator">&lt;-</span> as.list<span class="hljs-punctuation">(</span>X<span class="hljs-punctuation">)</span><br>    .Internal<span class="hljs-punctuation">(</span>lapply<span class="hljs-punctuation">(</span>X<span class="hljs-punctuation">,</span> FUN<span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="四、sapply"><a href="#四、sapply" class="headerlink" title="四、sapply"></a>四、sapply</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs R"><span class="hljs-operator">&gt;</span> sapply<br><span class="hljs-keyword">function</span> <span class="hljs-punctuation">(</span>X<span class="hljs-punctuation">,</span> FUN<span class="hljs-punctuation">,</span> ...<span class="hljs-punctuation">,</span> simplify <span class="hljs-operator">=</span> <span class="hljs-literal">TRUE</span><span class="hljs-punctuation">,</span> USE.NAMES <span class="hljs-operator">=</span> <span class="hljs-literal">TRUE</span><span class="hljs-punctuation">)</span> <br><span class="hljs-punctuation">&#123;</span><br>    FUN <span class="hljs-operator">&lt;-</span> match.fun<span class="hljs-punctuation">(</span>FUN<span class="hljs-punctuation">)</span><br>    answer <span class="hljs-operator">&lt;-</span> lapply<span class="hljs-punctuation">(</span>X <span class="hljs-operator">=</span> X<span class="hljs-punctuation">,</span> FUN <span class="hljs-operator">=</span> FUN<span class="hljs-punctuation">,</span> ...<span class="hljs-punctuation">)</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span>USE.NAMES <span class="hljs-operator">&amp;&amp;</span> <span class="hljs-built_in">is.character</span><span class="hljs-punctuation">(</span>X<span class="hljs-punctuation">)</span> <span class="hljs-operator">&amp;&amp;</span> <span class="hljs-built_in">is.null</span><span class="hljs-punctuation">(</span><span class="hljs-built_in">names</span><span class="hljs-punctuation">(</span>answer<span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span> <br>        <span class="hljs-built_in">names</span><span class="hljs-punctuation">(</span>answer<span class="hljs-punctuation">)</span> <span class="hljs-operator">&lt;-</span> X<br>    <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span><span class="hljs-operator">!</span>isFALSE<span class="hljs-punctuation">(</span>simplify<span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span> <br>        simplify2array<span class="hljs-punctuation">(</span>answer<span class="hljs-punctuation">,</span> higher <span class="hljs-operator">=</span> <span class="hljs-punctuation">(</span>simplify <span class="hljs-operator">==</span> <span class="hljs-string">&quot;array&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span><br>    <span class="hljs-keyword">else</span> answer<br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong><code>FUN &lt;- match.fun(FUN)</code></strong><br>将 <code>FUN</code> 转换为实际的函数对象。如果 <code>FUN</code> 是函数名（字符串），它会被转换为对应的函数。</p>
+<p><strong><code>answer &lt;- lapply(X = X, FUN = FUN, ...)</code></strong><br>使用 <code>lapply</code> 对 <code>X</code> 的每个元素应用 <code>FUN</code>。<code>...</code> 表示可以传递额外的参数给 <code>FUN</code>。</p>
+<p><strong><code>if (USE.NAMES &amp;&amp; is.character(X) &amp;&amp; is.null(names(answer))) names(answer) &lt;- X</code></strong><br>如果 <code>USE.NAMES</code> 为 <code>TRUE</code>，<code>X</code> 是字符型，并且 <code>answer</code> 还没有名称，则将 <code>X</code> 作为 <code>answer</code> 的名字。</p>
+<p><strong><code>if (!isFALSE(simplify)) simplify2array(answer, higher = (simplify == &quot;array&quot;))</code></strong><br>如果 <code>simplify</code> 不是 <code>FALSE</code>，则使用 <code>simplify2array</code> 来简化结果为数组或矩阵。<code>simplify == &quot;array&quot;</code> 确定是否将结果简化为数组（当 <code>simplify</code> 等于 <code>&quot;array&quot;</code> 时）。</p>
+<p><strong><code>else answer</code></strong><br>如果 <code>simplify</code> 为 <code>FALSE</code>，则返回原始的列表 <code>answer</code>。</p>
+<h2 id="五、-和-逻辑运算符"><a href="#五、-和-逻辑运算符" class="headerlink" title="五、&amp;和&amp;&amp; 逻辑运算符"></a>五、&amp;和&amp;&amp; 逻辑运算符</h2><p>在 R 语言中，<code>&amp;&amp;</code> 是逻辑运算符，用于执行逻辑“与”操作（AND）。</p>
+<p><code>&amp;&amp;</code> 用于逻辑“与”操作的短路版本，适用于单一的逻辑比较。</p>
+<p><code>&amp;</code> 是元素级逻辑“与”操作，适用于向量化的逻辑比较，并且不会短路，即它会逐个元素进行比较。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs R"><span class="hljs-comment"># 使用 &amp;&amp;（短路运算）</span><br>x <span class="hljs-operator">&lt;-</span> <span class="hljs-built_in">c</span><span class="hljs-punctuation">(</span><span class="hljs-literal">TRUE</span><span class="hljs-punctuation">,</span> <span class="hljs-literal">FALSE</span><span class="hljs-punctuation">)</span><br>y <span class="hljs-operator">&lt;-</span> <span class="hljs-built_in">c</span><span class="hljs-punctuation">(</span><span class="hljs-literal">TRUE</span><span class="hljs-punctuation">,</span> <span class="hljs-literal">TRUE</span><span class="hljs-punctuation">)</span><br><br>result <span class="hljs-operator">&lt;-</span> x <span class="hljs-operator">&amp;&amp;</span> y<br><span class="hljs-comment"># result 为 TRUE，因为 &amp;&amp; 只取第一个元素进行逻辑比较</span><br><br><span class="hljs-comment"># 使用 &amp;（元素级运算）</span><br>result <span class="hljs-operator">&lt;-</span> x <span class="hljs-operator">&amp;</span> y<br><span class="hljs-comment"># result 为 c(TRUE, FALSE)，逐元素比较 x 和 y</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="六、vapply-中-FUN-VALUE-为-NA"><a href="#六、vapply-中-FUN-VALUE-为-NA" class="headerlink" title="六、vapply 中 FUN.VALUE 为 NA"></a>六、vapply 中 FUN.VALUE 为 NA</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs R">vapply<span class="hljs-punctuation">(</span>dots<span class="hljs-punctuation">,</span> <span class="hljs-keyword">function</span><span class="hljs-punctuation">(</span>x<span class="hljs-punctuation">)</span> <span class="hljs-built_in">is.symbol</span><span class="hljs-punctuation">(</span>x<span class="hljs-punctuation">)</span> <span class="hljs-operator">||</span> <span class="hljs-built_in">is.character</span><span class="hljs-punctuation">(</span>x<span class="hljs-punctuation">)</span><span class="hljs-punctuation">,</span> <br>       <span class="hljs-literal">NA</span><span class="hljs-punctuation">,</span> USE.NAMES <span class="hljs-operator">=</span> <span class="hljs-literal">FALSE</span><span class="hljs-punctuation">)</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="参数解释"><a href="#参数解释" class="headerlink" title="参数解释"></a>参数解释</h3><ul>
+<li>**<code>NA</code>**：这是 <code>vapply</code> 的 <code>FUN.VALUE</code> 参数，指定了函数返回值的预期类型。这里的 <code>NA</code> 表示一个缺失值（通常用于表示未指定或未知的值类型）。</li>
+</ul>
+<h3 id="FUN-VALUE-的作用"><a href="#FUN-VALUE-的作用" class="headerlink" title="FUN.VALUE 的作用"></a><code>FUN.VALUE</code> 的作用</h3><p>在 <code>vapply</code> 中，<code>FUN.VALUE</code> 是一个示例值，定义了 <code>vapply</code> 期望函数 <code>FUN</code> 返回的结果的类型。<code>vapply</code> 使用 <code>FUN.VALUE</code> 来确定最终结果的结构。<code>NA</code> 在这种情况下通常用于表示期望的结果类型为逻辑型向量，因为函数 <code>is.symbol</code> 和 <code>is.character</code> 都返回逻辑值。</p>
+<h3 id="为什么使用-NA"><a href="#为什么使用-NA" class="headerlink" title="为什么使用 NA"></a>为什么使用 <code>NA</code></h3><p>在 <code>vapply</code> 中使用 <code>NA</code> 来指定返回值的类型可以用于省略对具体类型的明确定义。如果你确定函数的返回值是逻辑型的，那么可以使用 <code>logical(1)</code> 来明确指定。例如：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs R">vapply<span class="hljs-punctuation">(</span>dots<span class="hljs-punctuation">,</span> <span class="hljs-keyword">function</span><span class="hljs-punctuation">(</span>x<span class="hljs-punctuation">)</span> <span class="hljs-built_in">is.symbol</span><span class="hljs-punctuation">(</span>x<span class="hljs-punctuation">)</span> <span class="hljs-operator">||</span> <span class="hljs-built_in">is.character</span><span class="hljs-punctuation">(</span>x<span class="hljs-punctuation">)</span><span class="hljs-punctuation">,</span> logical<span class="hljs-punctuation">(</span><span class="hljs-number">1</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">,</span> USE.NAMES <span class="hljs-operator">=</span> <span class="hljs-literal">FALSE</span><span class="hljs-punctuation">)</span><br></code></pre></td></tr></table></figure>
+
+<p>这里，<code>logical(1)</code> 指定了返回值的类型为长度为 1 的逻辑向量，而 <code>NA</code> 通常在示例中用来表示未具体化的类型。</p>
+<h2 id="七、rm中的逻辑判断"><a href="#七、rm中的逻辑判断" class="headerlink" title="七、rm中的逻辑判断"></a>七、rm中的逻辑判断</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs R"><span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span><span class="hljs-operator">!</span><span class="hljs-built_in">all</span><span class="hljs-punctuation">(</span>vapply<span class="hljs-punctuation">(</span>dots<span class="hljs-punctuation">,</span> <span class="hljs-keyword">function</span><span class="hljs-punctuation">(</span>x<span class="hljs-punctuation">)</span> <span class="hljs-built_in">is.symbol</span><span class="hljs-punctuation">(</span>x<span class="hljs-punctuation">)</span> <span class="hljs-operator">||</span> <span class="hljs-built_in">is.character</span><span class="hljs-punctuation">(</span>x<span class="hljs-punctuation">)</span><span class="hljs-punctuation">,</span> <br>            <span class="hljs-literal">NA</span><span class="hljs-punctuation">,</span> USE.NAMES <span class="hljs-operator">=</span> <span class="hljs-literal">FALSE</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span> <br>            stop<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;... must contain names or character strings&quot;</span><span class="hljs-punctuation">)</span><br></code></pre></td></tr></table></figure>
+
+<p>所有的dots都是symbol或者character，那么all()返回TRUE，!all()为FALSE，stop函数不执行，如果有一个不是symbol或者character，那么all返回F，!all()为T，stop函数执行。</p>
+<h2 id="八、stop函数"><a href="#八、stop函数" class="headerlink" title="八、stop函数"></a>八、stop函数</h2><p>在 R 语言中，<code>stop</code> 函数用于生成错误消息并停止函数的执行。它常用于在检测到问题或不符合条件时，向用户报告错误并终止当前的计算过程。<code>stop</code> 函数是错误处理的核心函数之一，帮助确保代码在遇到问题时能够及时中断，并提供有用的错误信息。</p>
+<h3 id="函数语法"><a href="#函数语法" class="headerlink" title="函数语法"></a>函数语法</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs R">stop<span class="hljs-punctuation">(</span>...<span class="hljs-punctuation">,</span> call. <span class="hljs-operator">=</span> <span class="hljs-literal">TRUE</span><span class="hljs-punctuation">,</span> domain <span class="hljs-operator">=</span> <span class="hljs-literal">NULL</span><span class="hljs-punctuation">)</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="参数解释-1"><a href="#参数解释-1" class="headerlink" title="参数解释"></a>参数解释</h3><ul>
+<li>**<code>...</code>**：要传递给 <code>stop</code> 函数的错误消息。可以是字符串或任何其他类型的对象，它们会被转换为字符串并作为错误消息显示。</li>
+<li>**<code>call.</code>**：逻辑值，表示是否在错误消息中显示出错的调用栈。默认值是 <code>TRUE</code>，表示在错误消息中包含函数调用信息，这对于调试非常有用。</li>
+<li>**<code>domain</code>**：用于国际化的参数，通常不需要修改。它指定了错误消息的翻译域，默认是 <code>NULL</code>，表示使用 R 的默认翻译设置。</li>
+</ul>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><ol>
+<li><p><strong>基本使用</strong></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs R">x <span class="hljs-operator">&lt;-</span> <span class="hljs-operator">-</span><span class="hljs-number">1</span><br><span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span>x <span class="hljs-operator">&lt;</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">&#123;</span><br>    stop<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;x cannot be negative&quot;</span><span class="hljs-punctuation">)</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>在这个示例中，如果 <code>x</code> 小于 0，<code>stop</code> 会生成一个错误消息 <code>&quot;x cannot be negative&quot;</code> 并终止程序的执行。</p>
+<p>注意，这里没有在错误信息里包含调用堆栈信息，因为这里没有错误，只是停止执行了。</p>
+</li>
+<li><p><strong>带有调试信息的错误</strong></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs R">my_function <span class="hljs-operator">&lt;-</span> <span class="hljs-keyword">function</span><span class="hljs-punctuation">(</span>x<span class="hljs-punctuation">)</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span>x <span class="hljs-operator">&lt;</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">&#123;</span><br>        stop<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;x cannot be negative&quot;</span><span class="hljs-punctuation">,</span> call. <span class="hljs-operator">=</span> <span class="hljs-literal">TRUE</span><span class="hljs-punctuation">)</span><br>    <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-built_in">return</span><span class="hljs-punctuation">(</span><span class="hljs-built_in">sqrt</span><span class="hljs-punctuation">(</span>x<span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span><br><span class="hljs-punctuation">&#125;</span><br><br>my_function<span class="hljs-punctuation">(</span><span class="hljs-operator">-</span><span class="hljs-number">1</span><span class="hljs-punctuation">)</span><br></code></pre></td></tr></table></figure>
+
+<p>这里，<code>call. = TRUE</code> 会在错误消息中包含调用堆栈信息，帮助用户了解错误发生的位置。</p>
+</li>
+<li><p><strong>多参数错误消息</strong></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs R">x <span class="hljs-operator">&lt;-</span> <span class="hljs-operator">-</span><span class="hljs-number">1</span><br>stop<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;The value of x is &quot;</span><span class="hljs-punctuation">,</span> x<span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;. It must be non-negative.&quot;</span><span class="hljs-punctuation">)</span><br></code></pre></td></tr></table></figure>
+
+<p><code>stop</code> 可以接受多个参数，这些参数会被自动拼接成一个完整的错误消息。</p>
+</li>
+</ol>
+<h2 id="九、调用堆栈信息"><a href="#九、调用堆栈信息" class="headerlink" title="九、调用堆栈信息"></a>九、调用堆栈信息</h2><p>调用堆栈信息（Call Stack Information）是指在程序执行过程中，函数调用的记录。这些记录展示了程序执行时的函数调用路径，从最初的调用到当前的函数。调用堆栈信息对于调试和错误排查非常有用，因为它提供了错误发生时的上下文和函数调用的顺序。</p>
+<h3 id="调用堆栈的基本概念"><a href="#调用堆栈的基本概念" class="headerlink" title="调用堆栈的基本概念"></a>调用堆栈的基本概念</h3><ol>
+<li><strong>调用堆栈的结构</strong>：<ul>
+<li><strong>栈帧</strong>：每个函数调用在调用堆栈中被称为一个“栈帧”或“调用帧”。每个栈帧包含了函数的调用信息，包括参数值、局部变量、返回地址等。</li>
+<li><strong>栈的顺序</strong>：调用堆栈的结构是一个“栈”数据结构，后进先出（LIFO）。这意味着最上面的栈帧是当前正在执行的函数，下面的栈帧是调用该函数的函数，依此类推。</li>
+</ul>
+</li>
+<li><strong>函数调用的顺序</strong>：<ul>
+<li>当函数 A 调用函数 B，函数 B 的栈帧会被推到调用堆栈的顶部。</li>
+<li>当函数 B 执行完成并返回，B 的栈帧会被从堆栈中弹出，控制返回到函数 A。</li>
+</ul>
+</li>
+<li><strong>错误的调用堆栈信息</strong>：<ul>
+<li>当程序遇到错误时，调用堆栈信息可以帮助开发人员理解错误发生的上下文。例如，错误可能发生在某个深层嵌套的函数中，通过调用堆栈可以追溯到最初的函数调用。</li>
+</ul>
+</li>
+</ol>
+<h3 id="在-R-中查看调用堆栈信息"><a href="#在-R-中查看调用堆栈信息" class="headerlink" title="在 R 中查看调用堆栈信息"></a>在 R 中查看调用堆栈信息</h3><p>在 R 中，调用堆栈信息可以通过几个方法查看：</p>
+<ol>
+<li><p>**使用 <code>traceback()</code>**：</p>
+<ul>
+<li><code>traceback()</code> 函数显示最近发生的错误的调用堆栈。它可以帮助你查看错误发生时的函数调用路径。</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-attribute">r</span>复制代码my_function &lt;- <span class="hljs-built_in">function</span>(x) &#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-attribute">x</span> &lt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-selector-tag">stop</span>(<span class="hljs-string">&quot;x cannot be negative&quot;</span>)<br>    &#125;<br>    <span class="hljs-built_in">sqrt</span>(<span class="hljs-attribute">x</span>)<br>&#125;<br><br><span class="hljs-built_in">tryCatch</span>(&#123;<br>    <span class="hljs-built_in">my_function</span>(-<span class="hljs-number">1</span>)<br>&#125;, error = <span class="hljs-built_in">function</span>(e) &#123;<br>    <span class="hljs-built_in">traceback</span>()<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<p>在这个例子中，<code>traceback()</code> 会显示 <code>my_function</code> 调用的堆栈信息，帮助了解错误发生的上下文。</p>
+</li>
+<li><p><strong>在错误消息中</strong>：</p>
+<ul>
+<li>默认情况下，R 的 <code>stop</code> 函数在错误消息中包含调用堆栈信息。如果你没有设置 <code>call. = FALSE</code>，调用堆栈信息会自动包含在错误输出中。</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-attribute">r</span>复制代码my_function &lt;- <span class="hljs-built_in">function</span>(x) &#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-attribute">x</span> &lt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-selector-tag">stop</span>(<span class="hljs-string">&quot;x cannot be negative&quot;</span>)<br>    &#125;<br>    <span class="hljs-built_in">sqrt</span>(<span class="hljs-attribute">x</span>)<br>&#125;<br><br><span class="hljs-function"><span class="hljs-title">my_function</span><span class="hljs-params">(-<span class="hljs-number">1</span>)</span></span><br></code></pre></td></tr></table></figure>
+
+<p>如果你直接在控制台运行 <code>my_function(-1)</code>，R 会显示错误消息和调用堆栈信息。</p>
+</li>
+<li><p><strong>使用调试工具</strong>：</p>
+<ul>
+<li>调试工具（如 <code>debug()</code>, <code>trace()</code> 和 <code>browser()</code>）可以提供更详细的调用堆栈信息，在调试复杂问题时非常有用。</li>
+</ul>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs scss"><span class="hljs-attribute">r</span>复制代码<span class="hljs-built_in">debug</span>(my_function)<br><span class="hljs-built_in">my_function</span>(-<span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
+
+<p><code>debug()</code> 会进入调试模式，逐步执行函数并显示调用堆栈信息。</p>
+</li>
+</ol>
+<h2 id="十、倒数第二行"><a href="#十、倒数第二行" class="headerlink" title="十、倒数第二行"></a>十、倒数第二行</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs r"><span class="hljs-built_in">list</span> <span class="hljs-operator">&lt;-</span> .Primitive<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;c&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">(</span><span class="hljs-built_in">list</span><span class="hljs-punctuation">,</span> vapply<span class="hljs-punctuation">(</span>dots<span class="hljs-punctuation">,</span> <span class="hljs-built_in">as.character</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span><br></code></pre></td></tr></table></figure>
+
+<ol>
+<li><p><strong><code>.Primitive(&quot;c&quot;)</code></strong>:</p>
+<ul>
+<li><code>.Primitive</code> 是 R 中的一个内部函数，用于表示 R 语言的原始（基础）函数。</li>
+<li><code>&quot;c&quot;</code> 是 <code>c()</code> 函数的名字。<code>c()</code> 函数在 R 中用于将多个元素合并成一个向量。通过 <code>.Primitive(&quot;c&quot;)</code>，你可以直接调用 <code>c()</code> 函数。</li>
+<li>使用 <code>.Primitive(&quot;c&quot;)</code> 可以避免函数的额外包装或附加行为，直接操作底层的函数实现。</li>
+</ul>
+</li>
+<li><p><strong><code>vapply(dots, as.character, &quot;&quot;)</code></strong>:</p>
+<ul>
+<li><code>vapply</code> 是一个 R 函数，用于将函数应用于列表或向量的每个元素，并将结果简化为指定类型的对象。</li>
+<li><code>dots</code> 是要操作的列表或向量。</li>
+<li><code>as.character</code> 是应用于 <code>dots</code> 中每个元素的函数，将每个元素转换为字符型。</li>
+<li><strong><code>&quot;&quot;</code> 是 <code>vapply</code> 的 <code>FUN.VALUE</code> 参数，指定了 <code>as.character</code> 函数返回值的类型（在这里是字符型的空字符串）。它表示 <code>vapply</code> 期望的结果是一个字符型的向量。</strong></li>
+</ul>
+</li>
+<li><p><strong><code>list &lt;- .Primitive(&quot;c&quot;)(list, vapply(dots, as.character, &quot;&quot;))</code></strong>:</p>
+<ul>
+<li>这行代码的目的是将 <code>list</code> 和通过 <code>vapply</code> 转换后的 <code>dots</code> 的结果合并成一个新的列表。</li>
+<li><code>vapply(dots, as.character, &quot;&quot;)</code> 处理了 <code>dots</code> 中的每个元素，并将其转换为字符型向量。</li>
+<li><code>.Primitive(&quot;c&quot;)(list, vapply(dots, as.character, &quot;&quot;))</code> 调用 <code>c()</code> 函数将 <code>list</code> 和转换后的结果连接起来，生成一个新的列表。</li>
+</ul>
+</li>
+</ol>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p>假设 <code>dots</code> 是一个包含多个对象的列表，我们想将这些对象转换为字符型并将其附加到现有的 <code>list</code> 中：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs r"><span class="hljs-comment"># 示例数据</span><br>dots <span class="hljs-operator">&lt;-</span> <span class="hljs-built_in">list</span><span class="hljs-punctuation">(</span><span class="hljs-number">1</span><span class="hljs-punctuation">,</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;three&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-number">4</span><span class="hljs-punctuation">)</span><br><span class="hljs-built_in">list</span> <span class="hljs-operator">&lt;-</span> <span class="hljs-built_in">list</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;a&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;b&quot;</span><span class="hljs-punctuation">)</span><br><br><span class="hljs-comment"># 使用 vapply 和 .Primitive(&quot;c&quot;) 进行合并</span><br><span class="hljs-built_in">list</span> <span class="hljs-operator">&lt;-</span> .Primitive<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;c&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">(</span><span class="hljs-built_in">list</span><span class="hljs-punctuation">,</span> vapply<span class="hljs-punctuation">(</span>dots<span class="hljs-punctuation">,</span> <span class="hljs-built_in">as.character</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span><br>print<span class="hljs-punctuation">(</span><span class="hljs-built_in">list</span><span class="hljs-punctuation">)</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>解释：</strong></p>
+<ul>
+<li><code>vapply(dots, as.character, &quot;&quot;)</code> 将 <code>dots</code> 中的每个元素转换为字符型，并返回一个字符型向量 <code>c(&quot;1&quot;, &quot;2&quot;, &quot;three&quot;, &quot;4&quot;)</code>。</li>
+<li><code>.Primitive(&quot;c&quot;)(list, c(&quot;1&quot;, &quot;2&quot;, &quot;three&quot;, &quot;4&quot;))</code> 将现有的 <code>list</code> 和这个字符型向量合并，生成一个新的列表 <code>list</code>。</li>
+</ul>
+<p><strong>结果：</strong></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs r"><span class="hljs-punctuation">[[</span><span class="hljs-number">1</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">[</span><span class="hljs-number">1</span><span class="hljs-punctuation">]</span> <span class="hljs-string">&quot;a&quot;</span><br><br><span class="hljs-punctuation">[[</span><span class="hljs-number">2</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">[</span><span class="hljs-number">1</span><span class="hljs-punctuation">]</span> <span class="hljs-string">&quot;b&quot;</span><br><br><span class="hljs-punctuation">[[</span><span class="hljs-number">3</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">[</span><span class="hljs-number">1</span><span class="hljs-punctuation">]</span> <span class="hljs-string">&quot;1&quot;</span><br><br><span class="hljs-punctuation">[[</span><span class="hljs-number">4</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">[</span><span class="hljs-number">1</span><span class="hljs-punctuation">]</span> <span class="hljs-string">&quot;2&quot;</span><br><br><span class="hljs-punctuation">[[</span><span class="hljs-number">5</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">[</span><span class="hljs-number">1</span><span class="hljs-punctuation">]</span> <span class="hljs-string">&quot;three&quot;</span><br><br><span class="hljs-punctuation">[[</span><span class="hljs-number">6</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">[</span><span class="hljs-number">1</span><span class="hljs-punctuation">]</span> <span class="hljs-string">&quot;4&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><code>.Primitive(&quot;c&quot;)</code> 是对基础 <code>c()</code> 函数的直接调用，避免了额外的包装。</li>
+<li><code>vapply(dots, as.character, &quot;&quot;)</code> 将 <code>dots</code> 中的每个元素转换为字符型，并简化为一个字符型向量。</li>
+<li>结合这两个部分，代码实现了将现有列表 <code>list</code> 和转换后的 <code>dots</code> 合并为一个新的列表。</li>
+</ul>
+<h2 id="十一、最后一行"><a href="#十一、最后一行" class="headerlink" title="十一、最后一行"></a>十一、最后一行</h2><p><code>.Internal(remove(list, envir, inherits))</code> 是 <code>remove</code> 函数在底层的实现调用，处理对象的实际删除操作。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/R/" class="print-no-link">#R</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>rm()原函数代码解读（下）</div>
+      <div>http://example.com/2024/08/26/rm(2)/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jingxi Qin</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年8月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/08/26/hello-world/" title="Hello World">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Hello World</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/08/25/240825%E5%9C%A8R%E4%B8%AD%E4%BD%BF%E7%94%A8GitHub%20Personal%20Access%20Token/" title="更新Github Personal Access Token">
+                        <span class="hidden-mobile">更新Github Personal Access Token</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
