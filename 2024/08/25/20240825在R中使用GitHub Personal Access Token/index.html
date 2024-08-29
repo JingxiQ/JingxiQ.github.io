@@ -19,24 +19,22 @@
   <meta name="author" content="Jingxi Qin">
   <meta name="keywords" content="">
   
-    <meta name="description" content="修改RConsole文件 找到“R\R-4.4.1\etc\RConsole”文件，修改RConsole这个文件lang 选项为languange &#x3D; en  修改后，重新启动RStudio">
+    <meta name="description" content="用R下载github上的R包失败了，是我的令牌过期了。 报错如下： 12345678&gt; remotes::install_github(&#x27;chris-mcginnis-ucsf&#x2F;DoubletFinder&#x27;)Using github PAT from envvar GITHUB_PAT. Use &#96;gitcreds::gitcreds_set()&#96; and unset G">
 <meta property="og:type" content="article">
-<meta property="og:title" content="设置RStudio语言默认为英文">
-<meta property="og:url" content="http://example.com/2024/08/25/240825%E8%AE%BE%E7%BD%AERStudio%E6%8F%90%E7%A4%BA%E8%AF%8D%E4%B8%BA%E8%8B%B1%E6%96%87/index.html">
+<meta property="og:title" content="更新Github Personal Access Token">
+<meta property="og:url" content="http://example.com/2024/08/25/20240825%E5%9C%A8R%E4%B8%AD%E4%BD%BF%E7%94%A8GitHub%20Personal%20Access%20Token/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="修改RConsole文件 找到“R\R-4.4.1\etc\RConsole”文件，修改RConsole这个文件lang 选项为languange &#x3D; en  修改后，重新启动RStudio">
+<meta property="og:description" content="用R下载github上的R包失败了，是我的令牌过期了。 报错如下： 12345678&gt; remotes::install_github(&#x27;chris-mcginnis-ucsf&#x2F;DoubletFinder&#x27;)Using github PAT from envvar GITHUB_PAT. Use &#96;gitcreds::gitcreds_set()&#96; and unset G">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i-blog.csdnimg.cn/direct/8568eeb120fa42498ac687bcf930810a.png">
 <meta property="article:published_time" content="2024-08-24T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-08-25T17:27:16.758Z">
+<meta property="article:modified_time" content="2024-08-25T17:19:35.465Z">
 <meta property="article:author" content="Jingxi Qin">
 <meta property="article:tag" content="R">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://i-blog.csdnimg.cn/direct/8568eeb120fa42498ac687bcf930810a.png">
   
   
   
-  <title>设置RStudio语言默认为英文 - Hexo</title>
+  <title>更新Github Personal Access Token - Hexo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -202,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="设置RStudio语言默认为英文"></span>
+            <span id="subtitle" data-typed-text="更新Github Personal Access Token"></span>
           
         </div>
 
@@ -225,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          36 字
+          271 字
         
       </span>
     
@@ -236,7 +234,7 @@
         
         
         
-          1 分钟
+          3 分钟
         
       </span>
     
@@ -273,17 +271,22 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">设置RStudio语言默认为英文</h1>
+            <h1 id="seo-header">更新Github Personal Access Token</h1>
             
             
               <div class="markdown-body">
                 
-                <ul>
-<li>修改RConsole文件</li>
-<li>找到“R\R-4.4.1\etc\RConsole”文件，修改RConsole这个文件lang 选项为<strong>languange &#x3D; en</strong></li>
-<li><img src="https://i-blog.csdnimg.cn/direct/8568eeb120fa42498ac687bcf930810a.png" srcset="/img/loading.gif" lazyload alt="img"></li>
-<li>修改后，重新启动RStudio</li>
-</ul>
+                <p>用R下载github上的R包失败了，是我的令牌过期了。</p>
+<p>报错如下：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs R"><span class="hljs-operator">&gt;</span> remotes<span class="hljs-operator">::</span>install_github<span class="hljs-punctuation">(</span><span class="hljs-string">&#x27;chris-mcginnis-ucsf/DoubletFinder&#x27;</span><span class="hljs-punctuation">)</span><br>Using github PAT from envvar GITHUB_PAT. Use `gitcreds::gitcreds_set()` and unset GITHUB_PAT <span class="hljs-keyword">in</span> .Renviron <span class="hljs-punctuation">(</span>or elsewhere<span class="hljs-punctuation">)</span> <span class="hljs-keyword">if</span> you want to use the more secure git credential store instead.<br>Error<span class="hljs-operator">:</span> Failed to install <span class="hljs-string">&#x27;unknown package&#x27;</span> from GitHub<span class="hljs-operator">:</span><br>  HTTP error <span class="hljs-number">401.</span><br>  Bad credentials<br><br>  Rate limit remaining<span class="hljs-operator">:</span> <span class="hljs-number">51</span><span class="hljs-operator">/</span><span class="hljs-number">60</span><br>  Rate limit reset at<span class="hljs-operator">:</span> <span class="hljs-number">2024</span><span class="hljs-operator">-</span><span class="hljs-number">08</span><span class="hljs-operator">-</span><span class="hljs-number">25</span> <span class="hljs-number">14</span><span class="hljs-operator">:</span><span class="hljs-number">46</span><span class="hljs-operator">:</span><span class="hljs-number">14</span> UTC<br></code></pre></td></tr></table></figure>
+
+<p>然后去github，Developer Settings, Personal access tokens, Tokens (classic)。发现我的tooken已经过期了。重新生成令牌，选择repo权限。</p>
+<p>一开始去R包etc下新建.Renviron，但也没用，这里应该是没有把R加入环境变量。</p>
+<p>然后我按照报错信息里的，用Sys.getenv(“GITHUB_PAT”)看了下，还是老的令牌，然后用Sys.setenv()，根据提示，选择GITHUB_PAT，Sys.setenv(“GITHUB_PAT” &#x3D; “my_token”)，就可以了，不放心又用Sys.getenv看了下，确实改好了。</p>
+<p>再去github下载就没问题了。然后运行结果的开头如下，后面就是正常的安装了</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs R">remotes<span class="hljs-operator">::</span>install_github<span class="hljs-punctuation">(</span><span class="hljs-string">&#x27;chris-mcginnis-ucsf/DoubletFinder&#x27;</span><span class="hljs-punctuation">)</span><br>Using github PAT from envvar GITHUB_PAT. Use `gitcreds::gitcreds_set()` and unset GITHUB_PAT <span class="hljs-keyword">in</span> .Renviron <span class="hljs-punctuation">(</span>or elsewhere<span class="hljs-punctuation">)</span> <span class="hljs-keyword">if</span> you want to use the more secure git credential store instead.<br>Downloading GitHub repo chris<span class="hljs-operator">-</span>mcginnis<span class="hljs-operator">-</span>ucsf<span class="hljs-operator">/</span>DoubletFinder<span class="hljs-operator">@</span>HEAD<br>These packages have more recent versions available.<br>It is recommended to update <span class="hljs-built_in">all</span> of them.<br>Which would you like to update<span class="hljs-operator">?</span><br><br><span class="hljs-number">1</span><span class="hljs-operator">:</span> All                           <br><span class="hljs-number">2</span><span class="hljs-operator">:</span> CRAN packages only            <br><span class="hljs-number">3</span><span class="hljs-operator">:</span> None                          <br><span class="hljs-number">4</span><span class="hljs-operator">:</span> bitops <span class="hljs-punctuation">(</span><span class="hljs-number">1.0</span><span class="hljs-operator">-</span><span class="hljs-number">7</span> <span class="hljs-operator">-&gt;</span> <span class="hljs-number">1.0</span><span class="hljs-operator">-</span><span class="hljs-number">8</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">[</span>CRAN<span class="hljs-punctuation">]</span><br><br>Enter one or more numbers<span class="hljs-punctuation">,</span> or an empty line to skip updates<span class="hljs-operator">:</span> <br></code></pre></td></tr></table></figure>
+
+<p>所以前面的提示并不是问题所在，设置好系统环境里的GITHUB令牌才是关键。</p>
 
                 
               </div>
@@ -308,8 +311,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>设置RStudio语言默认为英文</div>
-      <div>http://example.com/2024/08/25/240825设置RStudio提示词为英文/</div>
+      <div>更新Github Personal Access Token</div>
+      <div>http://example.com/2024/08/25/20240825在R中使用GitHub Personal Access Token/</div>
     </div>
     <div class="license-meta">
       
@@ -353,9 +356,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/08/25/240825%E5%9C%A8R%E4%B8%AD%E4%BD%BF%E7%94%A8GitHub%20Personal%20Access%20Token/" title="更新Github Personal Access Token">
+                      <a href="/2024/08/25/20240825%E8%AE%BE%E7%BD%AERStudio%E6%8F%90%E7%A4%BA%E8%AF%8D%E4%B8%BA%E8%8B%B1%E6%96%87/" title="设置RStudio语言默认为英文">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">更新Github Personal Access Token</span>
+                        <span class="hidden-mobile">设置RStudio语言默认为英文</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -363,8 +366,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/08/25/rm/" title="rm()原函数代码解读（上）">
-                        <span class="hidden-mobile">rm()原函数代码解读（上）</span>
+                      <a href="/2024/08/23/Hexo%E6%90%AD%E5%BB%BA%E7%BD%91%E7%AB%99/" title="Hexo+Github 搭建网站">
+                        <span class="hidden-mobile">Hexo+Github 搭建网站</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
