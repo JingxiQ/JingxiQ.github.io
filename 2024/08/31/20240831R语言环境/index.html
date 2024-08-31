@@ -27,7 +27,7 @@
 <meta property="og:description" content="《R语言统计入门》读书笔记">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-08-31T03:31:00.000Z">
-<meta property="article:modified_time" content="2024-08-31T03:31:57.318Z">
+<meta property="article:modified_time" content="2024-08-31T12:49:02.094Z">
 <meta property="article:author" content="Jingxi Qin">
 <meta property="article:tag" content="R">
 <meta name="twitter:card" content="summary_large_image">
@@ -98,7 +98,7 @@
 
 
   
-<meta name="generator" content="Hexo 7.3.0"></head>
+</head>
 
 
 <body>
@@ -180,6 +180,18 @@
               <a class="nav-link" href="/links/" target="_self">
                 <i class="iconfont icon-link-fill"></i>
                 <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/new/" target="_self">
+                <i class="iconfont icon-books"></i>
+                <span>cheatsheet</span>
               </a>
             </li>
           
@@ -289,7 +301,8 @@
             
               <div class="markdown-body">
                 
-                <h2 id="会话管理"><a href="#会话管理" class="headerlink" title="会话管理"></a>会话管理</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs R">ls<span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><br>rm<span class="hljs-punctuation">(</span>height<span class="hljs-punctuation">,</span> weight<span class="hljs-punctuation">)</span><br>rm<span class="hljs-punctuation">(</span><span class="hljs-built_in">list</span><span class="hljs-operator">=</span>ls<span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span><br><span class="hljs-comment"># rm function(..., list = character(), pos = -s, envir = as.environment(pos), inherits = FALSE)</span><br>save.image<span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><br></code></pre></td></tr></table></figure>
+                <p><a href="../cheatsheet/index.html">链接到本地文件</a></p>
+<h2 id="会话管理"><a href="#会话管理" class="headerlink" title="会话管理"></a>会话管理</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs R">ls<span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><br>rm<span class="hljs-punctuation">(</span>height<span class="hljs-punctuation">,</span> weight<span class="hljs-punctuation">)</span><br>rm<span class="hljs-punctuation">(</span><span class="hljs-built_in">list</span><span class="hljs-operator">=</span>ls<span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span><br><span class="hljs-comment"># rm function(..., list = character(), pos = -s, envir = as.environment(pos), inherits = FALSE)</span><br>save.image<span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><br></code></pre></td></tr></table></figure>
 
 <p>不会删除以点号开头的向量，因为<code>ls()</code>不能列出它们，需要用<code>ls(all = T)</code>，但这种名称都为系统本身所使用。</p>
 <h3 id="文本输出"><a href="#文本输出" class="headerlink" title="文本输出"></a>文本输出</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs R">getwd<span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><br>setwd<span class="hljs-punctuation">(</span>mydir<span class="hljs-punctuation">)</span><br>sink<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;myfile&quot;</span><span class="hljs-punctuation">)</span><br>ls<span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><br>sink<span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><br></code></pre></td></tr></table></figure>

@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+
+<head>
+  <script src="assets/js/color-modes.js"></script>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.118.2">
+  <title>Cheatsheet · Bootstrap v5.3</title>
+
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/cheatsheet/">
+
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+
+  <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+
+    .b-example-divider {
+      width: 100%;
+      height: 3rem;
+      background-color: rgba(0, 0, 0, .1);
+      border: solid rgba(0, 0, 0, .15);
+      border-width: 1px 0;
+      box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+    }
+
+    .b-example-vr {
+      flex-shrink: 0;
+      width: 1.5rem;
+      height: 100vh;
+    }
+
+    .bi {
+      vertical-align: -.125em;
+      fill: currentColor;
+    }
+
+    .nav-scroller {
+      position: relative;
+      z-index: 2;
+      height: 2.75rem;
+      overflow-y: hidden;
+    }
+
+    .nav-scroller .nav {
+      display: flex;
+      flex-wrap: nowrap;
+      padding-bottom: 1rem;
+      margin-top: -1px;
+      overflow-x: auto;
+      text-align: center;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .btn-bd-primary {
+      --bd-violet-bg: #712cf9;
+      --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+      --bs-btn-font-weight: 600;
+      --bs-btn-color: var(--bs-white);
+      --bs-btn-bg: var(--bd-violet-bg);
+      --bs-btn-border-color: var(--bd-violet-bg);
+      --bs-btn-hover-color: var(--bs-white);
+      --bs-btn-hover-bg: #6528e0;
+      --bs-btn-hover-border-color: #6528e0;
+      --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+      --bs-btn-active-color: var(--bs-btn-hover-color);
+      --bs-btn-active-bg: #5a23c8;
+      --bs-btn-active-border-color: #5a23c8;
+    }
+
+    .bd-mode-toggle {
+      z-index: 1500;
+    }
+
+    .bd-mode-toggle .dropdown-menu .active .bi {
+      display: block !important;
+    }
+
+
+    .dropdown-toggle {
+      outline: 0;
+    }
+
+    .btn-toggle {
+      padding: .25rem .5rem;
+      font-weight: 600;
+      color: var(--bs-emphasis-color);
+      background-color: transparent;
+    }
+
+    .btn-toggle:hover,
+    .btn-toggle:focus {
+      color: rgba(var(--bs-emphasis-color-rgb), .85);
+      background-color: var(--bs-tertiary-bg);
+    }
+
+    .btn-toggle::before {
+      width: 1.25em;
+      line-height: 0;
+      content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+      transition: transform .35s ease;
+      transform-origin: .5em 50%;
+    }
+
+    [data-bs-theme="dark"] .btn-toggle::before {
+      content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%28255,255,255,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+    }
+
+    .btn-toggle[aria-expanded="true"] {
+      color: rgba(var(--bs-emphasis-color-rgb), .85);
+    }
+
+    .btn-toggle[aria-expanded="true"]::before {
+      transform: rotate(90deg);
+    }
+
+    .btn-toggle-nav a {
+      padding: .1875rem .5rem;
+      margin-top: .125rem;
+      margin-left: 1.25rem;
+    }
+
+    .btn-toggle-nav a:hover,
+    .btn-toggle-nav a:focus {
+      background-color: var(--bs-tertiary-bg);
+    }
+
+    .scrollarea {
+      overflow-y: auto;
+    }
+
+
+    .dropdown-toggle {
+      outline: 0;
+    }
+
+    .btn-toggle {
+      padding: .25rem .5rem;
+      font-weight: 600;
+      color: var(--bs-emphasis-color);
+      background-color: transparent;
+    }
+
+    .btn-toggle:hover,
+    .btn-toggle:focus {
+      color: rgba(var(--bs-emphasis-color-rgb), .85);
+      background-color: var(--bs-tertiary-bg);
+    }
+
+    .btn-toggle::before {
+      width: 1.25em;
+      line-height: 0;
+      content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+      transition: transform .35s ease;
+      transform-origin: .5em 50%;
+    }
+
+    [data-bs-theme="dark"] .btn-toggle::before {
+      content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%28255,255,255,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+    }
+
+    .btn-toggle[aria-expanded="true"] {
+      color: rgba(var(--bs-emphasis-color-rgb), .85);
+    }
+
+    .btn-toggle[aria-expanded="true"]::before {
+      transform: rotate(90deg);
+    }
+
+    .btn-toggle-nav a {
+      padding: .1875rem .5rem;
+      margin-top: .125rem;
+      margin-left: 1.25rem;
+    }
+
+    .btn-toggle-nav a:hover,
+    .btn-toggle-nav a:focus {
+      background-color: var(--bs-tertiary-bg);
+    }
+
+    .scrollarea {
+      overflow-y: auto;
+    }
+
+    body {
+      background-image: url('./eugene-golovesov-8gxiL7WfcEE-unsplash.jpg');
+      /* Path to your image */
+      background-size: cover;
+      /* Ensures the image covers the entire background */
+      background-position: center;
+      /* Centers the image */
+      background-repeat: no-repeat;
+      /* Prevents the image from repeating */
+    }
+
+    .bd-cheatsheet {
+      background-image: url('./visax-nfqZ9Z50zvc-unsplash.jpg');
+      /* Path to your image */
+      background-size: cover;
+      /* Ensures the image covers the entire background */
+      background-position: center;
+      /* Centers the image */
+      background-repeat: no-repeat;
+      /* Prevents the image from repeating */
+    }
+  </style>
+
+
+
+</head>
+
+<body class="bg-body-tertiary">
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+    <symbol id="check2" viewBox="0 0 16 16">
+      <path
+        d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+    </symbol>
+    <symbol id="circle-half" viewBox="0 0 16 16">
+      <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z" />
+    </symbol>
+    <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+      <path
+        d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z" />
+      <path
+        d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z" />
+    </symbol>
+    <symbol id="sun-fill" viewBox="0 0 16 16">
+      <path
+        d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
+    </symbol>
+  </svg>
+
+
+
+
+  <main>
+    <div class="container px-4 py-5" id="hanging-icons">
+      <h2 class="pb-2 border-bottom">Welcome!😊</h2>
+      <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+        <div class="col d-flex align-items-start">
+          <div>
+            <h3 class="fs-2 text-body-emphasis">Google</h3>
+            <!-- <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and
+              probably just keep going until we run out of words.</p> -->
+            <a href="https://www.google.com.hk/" class="btn btn-primary">
+              Go
+            </a>
+          </div>
+        </div>
+        <div class="col d-flex align-items-start">
+          <div>
+            <h3 class="fs-2 text-body-emphasis">Baidu</h3>
+            <!-- <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and
+              probably just keep going until we run out of words.</p> -->
+            <a href="https://www.baidu.com/" class="btn btn-primary">
+              Go
+            </a>
+          </div>
+        </div>
+        <div class="col d-flex align-items-start">
+          <div>
+            <h3 class="fs-2 text-body-emphasis">Bilibili</h3>
+            <!-- <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and
+              probably just keep going until we run out of words.</p> -->
+            <a href="https://t.bilibili.com/?spm_id_from=333.1007.0.0" class="btn btn-primary">
+              Go
+            </a>
+          </div>
+        </div>
+        <div class="col d-flex align-items-start">
+          <div>
+            <h3 class="fs-2 text-body-emphasis">Youtube</h3>
+            <!-- <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and
+              probably just keep going until we run out of words.</p> -->
+            <a href="https://www.youtube.com/" class="btn btn-primary">
+              Go
+            </a>
+          </div>
+        </div>
+        <div class="col d-flex align-items-start">
+          <div>
+            <h3 class="fs-2 text-body-emphasis">Translation</h3>
+            <!-- <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and
+              probably just keep going until we run out of words.</p> -->
+            <a href="https://fanyi.baidu.com/#en/zh/" class="btn btn-primary">
+              Go
+            </a>
+          </div>
+        </div>
+        <div class="col d-flex align-items-start">
+          <div>
+            <h3 class="fs-2 text-body-emphasis">Pubmed</h3>
+            <!-- <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and
+                              probably just keep going until we run out of words.</p> -->
+            <a href="https://pubmed.ncbi.nlm.nih.gov/" class="btn btn-primary">
+              Go
+            </a>
+          </div>
+        </div>
+        <div class="col d-flex align-items-start">
+          <div>
+            <h3 class="fs-2 text-body-emphasis">SYSU</h3>
+            <!-- <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and
+                              probably just keep going until we run out of words.</p> -->
+            <a href="https://cas.sysu.edu.cn/cas/login?service=https://portal.sysu.edu.cn/newClient/shiro-cas"
+              class="btn btn-primary">
+              Go
+            </a>
+          </div>
+        </div>
+        <div class="col d-flex align-items-start">
+          <div>
+            <h3 class="fs-2 text-body-emphasis">chatgpt3</h3>
+            <!-- <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and
+                                              probably just keep going until we run out of words.</p> -->
+            <a href="https://chat.openai.com/" class="btn btn-primary">
+              Go
+            </a>
+          </div>
+        </div>
+        <div class="col d-flex align-items-start">
+          <div>
+            <h3 class="fs-2 text-body-emphasis">163mail</h3>
+            <!-- <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and
+                              probably just keep going until we run out of words.</p> -->
+            <a href="https://mail.163.com/" class="btn btn-primary">
+              Go
+            </a>
+          </div>
+        </div>
+        <div class="col d-flex align-items-start">
+          <div>
+            <h3 class="fs-2 text-body-emphasis">MS-sysu</h3>
+            <!-- <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and
+                              probably just keep going until we run out of words.</p> -->
+            <a href="https://zssom.sysu.edu.cn/" class="btn btn-primary">
+              Go
+            </a>
+          </div>
+        </div>
+        <div class="col d-flex align-items-start">
+          <div>
+            <h3 class="fs-2 text-body-emphasis">NCBI</h3>
+            <!-- <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and
+                              probably just keep going until we run out of words.</p> -->
+            <a href="https://www.ncbi.nlm.nih.gov" class="btn btn-primary">
+              Go
+            </a>
+          </div>
+        </div>
+        <div class="col d-flex align-items-start">
+          <div>
+            <h3 class="fs-2 text-body-emphasis">MS-sysu</h3>
+            <!-- <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and
+                              probably just keep going until we run out of words.</p> -->
+            <a href="https://zssom.sysu.edu.cn/" class="btn btn-primary">
+              Go
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+  <div class="bd-cheatsheet container-fluid bg-body">
+
+    <section id="components">
+      <article class="my-3" id="list-group">
+        <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
+          <br>
+          <h3>Journals</h3>
+        </div>
+
+        <div class="bd-example-snippet bd-code-snippet">
+          <div class="bd-example m-0 border-0">
+            <div class="list-group">
+              <a href="https://www.nature.com/" class="list-group-item list-group-item-action">Nature</a>
+
+              <a href="https://www.nejm.org/" class="list-group-item list-group-item-action list-group-item-primary">The
+                New England Journal of Medicine</a>
+              <a href="https://www.science.org/"
+                class="list-group-item list-group-item-action list-group-item-secondary">Science</a>
+              <a href="https://cvpr.thecvf.com/"
+                class="list-group-item list-group-item-action list-group-item-success">IEEE/CVF Conference on Computer
+                Vision and Pattern
+                Recognition</a>
+              <a href="https://www.thelancet.com/"
+                class="list-group-item list-group-item-action list-group-item-danger">The Lancet</a>
+              <a href="https://www.nature.com/ncomms/research-articles/"
+                class="list-group-item list-group-item-action list-group-item-warning">Nature Communications</a>
+              <a href="https://www.nature.com/ng/research-articles/"
+                class="list-group-item list-group-item-action list-group-item-warning">Nature genetics</a>
+              <a href="https://www.nature.com/natbiomedeng/research-articles/"
+                class="list-group-item list-group-item-action list-group-item-info">Nature biomedical engineering</a>
+              <a href="https://www.nature.com/ncb/research-articles/"
+                class="list-group-item list-group-item-action list-group-item-info">Nature cell biology</a>
+              <a href="https://www.nature.com/ni/research-articles/"
+                class="list-group-item list-group-item-action list-group-item-info">Nature immunology</a>
+              <a href="https://www.nature.com/nnano/research-articles/"
+                class="list-group-item list-group-item-action list-group-item-info">Nature nanotechnology</a>
+              <a href="https://www.nature.com/natmetab/"
+                class="list-group-item list-group-item-action list-group-item-info">Nature metabolism</a>
+              <a href="https://www.nature.com/natmachintell/research-articles/"
+                class="list-group-item list-group-item-action list-group-item-info">Nature machine intelligence</a>
+              <a href="https://www.nature.com/nm/research-articles"
+                class="list-group-item list-group-item-action list-group-item-info">Nature medicine</a>
+              <a href="https://www.cell.com/"
+                class="list-group-item list-group-item-action list-group-item-info">Cell</a>
+              <a href="https://genomemedicine.biomedcentral.com/"
+                class="list-group-item list-group-item-action list-group-item-info">Genome medicine</a>
+
+              <!-- <a href="#" class="list-group-item list-group-item-action list-group-item-light">A simple light list
+                group item</a>
+              <a href="#" class="list-group-item list-group-item-action list-group-item-dark">A simple dark list group
+                item</a> -->
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
+          <h3>Ophthalmology</h3>
+        </div>
+
+        <div class="bd-example-snippet bd-code-snippet">
+          <div class="bd-example m-0 border-0">
+            <div class="list-group">
+              <a href="https://www.sciencedirect.com/journal/progress-in-retinal-and-eye-research"
+                class="list-group-item list-group-item-action">Progress in Retinal and Eye Research</a>
+              <a href="https://www.aaojournal.org/"
+                class="list-group-item list-group-item-action list-group-item-primary">Ophthalmology Home Page</a>
+              <a href="https://www.sciencedirect.com/journal/the-ocular-surface"
+                class="list-group-item list-group-item-action list-group-item-secondary">The Ocular Surface</a>
+              <a href="https://www.annualreviews.org/journal/vision"
+                class="list-group-item list-group-item-action list-group-item-success">Annual Review of Vision
+                Science</a>
+              <a href="https://jamanetwork.com/journals/jamaophthalmology"
+                class="list-group-item list-group-item-action list-group-item-danger">JAMA Ophthalmology</a>
+            </div>
+          </div>
+        </div>
+  </div>
+  </article>
+  </section>
+  </div>
+
+  <div class="modal fade" id="exampleModalDefault" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="staticBackdropLive" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLiveLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLiveLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>I will not close if you click outside me. Don't even try to press escape key.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Understood</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="exampleModalCenteredScrollable" tabindex="-1"
+    aria-labelledby="exampleModalCenteredScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalCenteredScrollableTitle">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>This is some placeholder content to show the scrolling behavior for modals. We use repeated line breaks to
+            demonstrate how content can exceed minimum inner height, thereby showing inner scrolling. When content
+            becomes longer than the predefined max-height of modal, content will be cropped and scrollable within the
+            modal.</p>
+          <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+          <p>This content should appear at the bottom after you scroll.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="exampleModalFullscreen" tabindex="-1" aria-labelledby="exampleModalFullscreenLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-4" id="exampleModalFullscreenLabel">Full screen modal</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="cheatsheet.js"></script>
+</body>
+
+</html>
