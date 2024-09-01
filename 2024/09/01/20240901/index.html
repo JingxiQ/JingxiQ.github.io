@@ -1,0 +1,761 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon-32x32.png">
+  <link rel="icon" href="/img/favicon-32x32.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jingxi Qin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="起因sink函数只有标准输出，但是没有把代码也附上，所以想要看原函数，看改动哪里可以添加。但是发现sink的功能部分是内置功能，无法修改。但是函数参数的判断和file函数的用法值得记录下。 sink原函数12345678910111213141516171819202122232425262728function (file &#x3D; NULL, append &#x3D; FALSE, type &#x3D; c(&amp;qu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sink函数">
+<meta property="og:url" content="http://example.com/2024/09/01/20240901/index.html">
+<meta property="og:site_name" content="Jingxi Qin Blog">
+<meta property="og:description" content="起因sink函数只有标准输出，但是没有把代码也附上，所以想要看原函数，看改动哪里可以添加。但是发现sink的功能部分是内置功能，无法修改。但是函数参数的判断和file函数的用法值得记录下。 sink原函数12345678910111213141516171819202122232425262728function (file &#x3D; NULL, append &#x3D; FALSE, type &#x3D; c(&amp;qu">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-09-01T08:33:00.000Z">
+<meta property="article:modified_time" content="2024-09-01T08:33:43.462Z">
+<meta property="article:author" content="Jingxi Qin">
+<meta property="article:tag" content="R">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>sink函数 - Jingxi Qin Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":true},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jingxi Qin Blog @ SYSU</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/new/" target="_self">
+                <i class="iconfont icon-books"></i>
+                <span>cheatsheet</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="sink函数"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-09-01 16:33" pubdate>
+          2024年9月1日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">sink函数</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>sink函数只有标准输出，但是没有把代码也附上，所以想要看原函数，看改动哪里可以添加。但是发现sink的功能部分是内置功能，无法修改。但是函数参数的判断和file函数的用法值得记录下。</p>
+<h2 id="sink原函数"><a href="#sink原函数" class="headerlink" title="sink原函数"></a>sink原函数</h2><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs R"><span class="hljs-keyword">function</span> <span class="hljs-punctuation">(</span>file <span class="hljs-operator">=</span> <span class="hljs-literal">NULL</span><span class="hljs-punctuation">,</span> append <span class="hljs-operator">=</span> <span class="hljs-literal">FALSE</span><span class="hljs-punctuation">,</span> type <span class="hljs-operator">=</span> <span class="hljs-built_in">c</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;output&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;message&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">,</span> <br>          split <span class="hljs-operator">=</span> <span class="hljs-literal">FALSE</span><span class="hljs-punctuation">)</span> <br><span class="hljs-punctuation">&#123;</span><br>  type <span class="hljs-operator">&lt;-</span> match.arg<span class="hljs-punctuation">(</span>type<span class="hljs-punctuation">)</span><br>  <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span>type <span class="hljs-operator">==</span> <span class="hljs-string">&quot;message&quot;</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span><span class="hljs-built_in">is.null</span><span class="hljs-punctuation">(</span>file<span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span> <br>      file <span class="hljs-operator">&lt;-</span> stderr<span class="hljs-punctuation">(</span><span class="hljs-punctuation">)</span><br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span><span class="hljs-operator">!</span>inherits<span class="hljs-punctuation">(</span>file<span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;connection&quot;</span><span class="hljs-punctuation">)</span> <span class="hljs-operator">||</span> <span class="hljs-operator">!</span>isOpen<span class="hljs-punctuation">(</span>file<span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span> <br>      stop<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;&#x27;file&#x27; must be NULL or an already open connection&quot;</span><span class="hljs-punctuation">)</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span>split<span class="hljs-punctuation">)</span> <br>      stop<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;cannot split the message connection&quot;</span><span class="hljs-punctuation">)</span><br>    .Internal<span class="hljs-punctuation">(</span>sink<span class="hljs-punctuation">(</span>file<span class="hljs-punctuation">,</span> <span class="hljs-literal">FALSE</span><span class="hljs-punctuation">,</span> <span class="hljs-literal">TRUE</span><span class="hljs-punctuation">,</span> <span class="hljs-literal">FALSE</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span><br>  <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-keyword">else</span> <span class="hljs-punctuation">&#123;</span><br>    closeOnExit <span class="hljs-operator">&lt;-</span> <span class="hljs-literal">FALSE</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span><span class="hljs-built_in">is.null</span><span class="hljs-punctuation">(</span>file<span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span> <br>      file <span class="hljs-operator">&lt;-</span> <span class="hljs-operator">-</span><span class="hljs-number">1L</span><br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span><span class="hljs-built_in">is.character</span><span class="hljs-punctuation">(</span>file<span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">&#123;</span><br>      file <span class="hljs-operator">&lt;-</span> file<span class="hljs-punctuation">(</span>file<span class="hljs-punctuation">,</span> <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span>append<span class="hljs-punctuation">)</span> <br>        <span class="hljs-string">&quot;a&quot;</span><br>        <span class="hljs-keyword">else</span> <span class="hljs-string">&quot;w&quot;</span><span class="hljs-punctuation">)</span><br>      closeOnExit <span class="hljs-operator">&lt;-</span> <span class="hljs-literal">TRUE</span><br>    <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span><span class="hljs-operator">!</span>inherits<span class="hljs-punctuation">(</span>file<span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;connection&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span> <br>      stop<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;&#x27;file&#x27; must be NULL, a connection or a character string&quot;</span><span class="hljs-punctuation">)</span><br>    .Internal<span class="hljs-punctuation">(</span>sink<span class="hljs-punctuation">(</span>file<span class="hljs-punctuation">,</span> closeOnExit<span class="hljs-punctuation">,</span> <span class="hljs-literal">FALSE</span><span class="hljs-punctuation">,</span> split<span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="match-arg"><a href="#match-arg" class="headerlink" title="match.arg"></a>match.arg</h2><p><code>match.arg</code> 的主要功能是：</p>
+<ol>
+<li><strong>参数匹配</strong>：将函数的参数值与一个预定义的字符向量进行匹配，确保该参数值是有效的。</li>
+<li><strong>规范化输入</strong>：将参数值转换为一致的形式，即标准化为预定义选项中的某一个。</li>
+</ol>
+<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><p>假设你有一个函数，其参数 <code>method</code> 可以取值 “lm”、”glm” 或 “loess”，你可以使用 <code>match.arg</code> 来确保 <code>method</code> 的值是这三者之一，并且返回这个值的标准形式。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs R">my_function <span class="hljs-operator">&lt;-</span> <span class="hljs-keyword">function</span><span class="hljs-punctuation">(</span>method <span class="hljs-operator">=</span> <span class="hljs-built_in">c</span><span class="hljs-punctuation">(</span><span class="hljs-string">&quot;lm&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;glm&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;loess&quot;</span><span class="hljs-punctuation">)</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-comment"># 使用 match.arg 确保 method 是有效的选项</span><br>  method <span class="hljs-operator">&lt;-</span> match.arg<span class="hljs-punctuation">(</span>method<span class="hljs-punctuation">)</span><br>  <br>  <span class="hljs-comment"># 根据选择的 method 执行不同的操作</span><br>  <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span>method <span class="hljs-operator">==</span> <span class="hljs-string">&quot;lm&quot;</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">&#123;</span><br>    cat<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;Using linear model.\n&quot;</span><span class="hljs-punctuation">)</span><br>  <span class="hljs-punctuation">&#125;</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span>method <span class="hljs-operator">==</span> <span class="hljs-string">&quot;glm&quot;</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">&#123;</span><br>    cat<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;Using generalized linear model.\n&quot;</span><span class="hljs-punctuation">)</span><br>  <span class="hljs-punctuation">&#125;</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-punctuation">(</span>method <span class="hljs-operator">==</span> <span class="hljs-string">&quot;loess&quot;</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">&#123;</span><br>    cat<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;Using local regression (loess).\n&quot;</span><span class="hljs-punctuation">)</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br><br><span class="hljs-comment"># 调用函数时使用合法选项</span><br>my_function<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;lm&quot;</span><span class="hljs-punctuation">)</span>    <span class="hljs-comment"># 输出: Using linear model.</span><br>my_function<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;loess&quot;</span><span class="hljs-punctuation">)</span> <span class="hljs-comment"># 输出: Using local regression (loess).</span><br><br><span class="hljs-comment"># 调用函数时使用不合法选项（会报错）</span><br>my_function<span class="hljs-punctuation">(</span><span class="hljs-string">&quot;tree&quot;</span><span class="hljs-punctuation">)</span>  <span class="hljs-comment"># 错误: &#x27;arg&#x27; should be one of “lm”, “glm”, “loess”</span><br></code></pre></td></tr></table></figure>
+
+<p>如果不给参数，<code>match.arg</code>默认第一个参数。</p>
+<h2 id="判断"><a href="#判断" class="headerlink" title="判断"></a>判断</h2><ul>
+<li><code>match.arg</code> 限制了type 只能是message和output其中之一</li>
+<li>如果type 是message<ul>
+<li>判断file<ul>
+<li>如果file是空的<ul>
+<li>file被设置为 <code>stderr()</code>，即标准错误输出。</li>
+</ul>
+</li>
+<li>如果file非空<ul>
+<li>它必须是一个打开的连接（即 <code>inherits(file, &quot;connection&quot;)</code> 和 <code>isOpen(file)</code> 都需要为真），否则报错</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>判断split<ul>
+<li>对于消息连接不支持分割</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>如果type 是output<ul>
+<li>判断file<ul>
+<li>如果file是空的<ul>
+<li>file它被设置为 <code>-1L</code>，表示不重定向（即默认输出）。</li>
+</ul>
+</li>
+<li>如果file非空<ul>
+<li>判断file是否为字符串<ul>
+<li>若是，设置file的读写方式<ul>
+<li>append为真：a，追加</li>
+<li>append为假：w，写入，覆盖</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>判断如果不是connection类<ul>
+<li>报错</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>里面closeOnExit的功能应该是在.Internal sink里。能看到的部分就是判断，决定读写方式，但是真正的功能怎么实现的看不到。</p>
+<blockquote>
+<p>在R语言中，<code>!inherits(file, &quot;connection&quot;)</code> 是一个用于检查对象类型的表达式。这里是对这个表达式的解释：</p>
+<ol>
+<li><p><strong><code>inherits()</code> 函数</strong>：</p>
+<ul>
+<li><code>inherits()</code> 是一个用于检查一个对象是否继承了某个类（或类的集合）的函数。</li>
+<li>语法是 <code>inherits(x, &quot;class&quot;)</code>，其中 <code>x</code> 是要检查的对象，<code>&quot;class&quot;</code> 是要检查的类名。</li>
+</ul>
+</li>
+<li><p><strong><code>&quot;connection&quot;</code> 类</strong>：</p>
+<ul>
+<li><code>&quot;connection&quot;</code> 是 R 中用于表示数据流（如文件、网络连接等）的一个类。</li>
+<li>如果一个对象是连接对象，它就会被标记为 <code>&quot;connection&quot;</code> 类。</li>
+</ul>
+</li>
+<li><p><strong><code>!</code> 操作符</strong>：</p>
+<ul>
+<li><code>!</code> 是逻辑非操作符，用于取反。</li>
+</ul>
+</li>
+<li><p>**<code>!inherits(file, &quot;connection&quot;)</code>**：</p>
+<ul>
+<li>这个表达式的作用是检查 <code>file</code> 对象是否<strong>不</strong>是 <code>&quot;connection&quot;</code> 类的实例。</li>
+<li>换句话说，它会返回 <code>TRUE</code> 如果 <code>file</code> 不是一个连接对象，否则返回 <code>FALSE</code>。</li>
+</ul>
+</li>
+</ol>
+<p>例如，如果你有一个变量 <code>file</code>，并且你想确认它是否不是一个连接对象，你可以使用这个表达式。如果 <code>file</code> 是一个连接对象（比如一个打开的文件连接），<code>inherits(file, &quot;connection&quot;)</code> 会返回 <code>TRUE</code>，而 <code>!inherits(file, &quot;connection&quot;)</code> 就会返回 <code>FALSE</code>。相反，如果 <code>file</code> 不是连接对象，<code>inherits(file, &quot;connection&quot;)</code> 会返回 <code>FALSE</code>，<code>!inherits(file, &quot;connection&quot;)</code> 会返回 <code>TRUE</code>。</p>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/R/" class="print-no-link">#R</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>sink函数</div>
+      <div>http://example.com/2024/09/01/20240901/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jingxi Qin</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年9月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/09/01/20240901R%E8%AF%AD%E8%A8%80%E7%8E%AF%E5%A2%83(2)/" title="R语言环境(2)">
+                        <span class="hidden-mobile">R语言环境(2)</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
