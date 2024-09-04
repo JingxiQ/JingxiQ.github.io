@@ -4,6 +4,59 @@
   
   
   <entry>
+    <title></title>
+    <link href="/2024/09/04/20240904%E6%A6%82%E7%8E%87%E5%92%8C%E5%88%86%E5%B8%83/"/>
+    <url>/2024/09/04/20240904%E6%A6%82%E7%8E%87%E5%92%8C%E5%88%86%E5%B8%83/</url>
+    
+    <content type="html"><![CDATA[<p>看起来你想更详细地了解累积分布函数（CDF）和分位数之间的关系。下面是它们的定义和关系：</p><ol><li><p><strong>累积分布函数（CDF）</strong>：对于随机变量 $ X $，累积分布函数 $ F_X(x) $ 定义为 $ P(X \leq x) $。它表示随机变量 $ X $ 取值小于或等于 $ x $ 的概率。数学表达式为：<br>$<br>F_X(x) &#x3D; P(X \leq x)<br>$</p></li><li><p><strong>分位数</strong>：分位数是指对于一个给定的概率 $ p $，分位数 $ Q(p) $ 是满足以下条件的值：<br>$<br>P(X \leq Q(p)) &#x3D; p<br>$<br>也就是说，分位数是使得累积分布函数等于 $ p $ 的 $ x $ 值。</p></li></ol><p>简言之，分位数是累积分布函数的逆函数。例如，分位数函数 $ Q(p) $ 可以通过累积分布函数 $ F_X(x) $ 来求得：<br>   $<br>   Q(p) &#x3D; F_X^{-1}(p)<br>   $<br>   这里的 $ F_X^{-1}(p) $ 表示累积分布函数的逆函数，给定概率 $ p $ 后找到的 $ x $ 值。</p><p><strong>总结</strong>：</p><ul><li>累积分布函数给出随机变量取值小于或等于某个值的概率。</li><li>分位数是使得累积分布函数等于某个给定概率值的随机变量值。</li></ul>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>R数据输入</title>
+    <link href="/2024/09/04/20240904R%E6%95%B0%E6%8D%AE%E8%BE%93%E5%85%A5/"/>
+    <url>/2024/09/04/20240904R%E6%95%B0%E6%8D%AE%E8%BE%93%E5%85%A5/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>R</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>非编码RNA</title>
+    <link href="/2024/09/04/20240904%E9%9D%9E%E7%BC%96%E7%A0%81RNA/"/>
+    <url>/2024/09/04/20240904%E9%9D%9E%E7%BC%96%E7%A0%81RNA/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>RNA</tag>
+      
+      <tag>Epigenetics</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>R编程</title>
     <link href="/2024/09/03/20240903R%E7%BC%96%E7%A8%8B/"/>
     <url>/2024/09/03/20240903R%E7%BC%96%E7%A8%8B/</url>
